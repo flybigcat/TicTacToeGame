@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ public class GameDaoImpl implements GameDao {
 	private EntityManager entityManager;
 
 	@Override
+	@PostAuthorize("principal.username == returnObject.player1.username")
 	public Game getGame( Integer id )
 	{
 		return entityManager.find( Game.class, id );
@@ -75,6 +78,7 @@ public class GameDaoImpl implements GameDao {
 
 	@Transactional
 	@Override
+	@PreAuthorize("principal.username == #game.player1.username or principal.username == #game.player2.username ")
 	public Game setGame( Game game )
 	{
 		return game = entityManager.merge( game );

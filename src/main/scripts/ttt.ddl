@@ -1,4 +1,9 @@
 
+    create table authorities (
+        username varchar(255) not null,
+        authority varchar(255)
+    );
+
     create table game_boards (
         game_id int4 not null,
         boardCell int4,
@@ -12,6 +17,7 @@
         outcome varchar(255),
         saveDate timestamp,
         startDate timestamp,
+        turn boolean not null,
         boardString varchar(255),
         player1_id int4,
         player2_id int4,

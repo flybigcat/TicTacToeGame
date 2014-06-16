@@ -9,11 +9,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>${player.username}</title>
 <link href="../css/min.css" rel="stylesheet" />
+<title>${player.username}</title>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+ <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle">
@@ -25,14 +25,14 @@
                 <ul class="nav navbar-nav">
 
                     <li><a href="../welcome.jsp">Go back to Welcome page</a></li>
-                    <li><a href="/tttGame/user/logout.html">Logout</a></li>
+                    <li><a href="/ttt/user/logout.html">Logout</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
         </div>
     </div>
     
-	<h3>${player.username}'s  saved  Games:</h3>
+    	<h3>${player.username}'s saved Games:</h3>
 
 	<c:if test="${savedGames == null || fn:length(savedGames) == 0}">
            There is no game saved.<br />

@@ -16,27 +16,35 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "games")
 public class Game implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonIgnore
 	@Id
 	@GeneratedValue
 	private Integer id;
 
+	@JsonIgnore
 	@ManyToOne
 	private User player1;
 
+	@JsonIgnore
 	@ManyToOne
 	private User player2;
 
+	@JsonIgnore
 	private Date startDate;
 
+	@JsonIgnore
 	// if null, it is not finished, saved game by user, not
 	private Date endDate;
 
+	@JsonIgnore
 	// if null, it is finished
 	private Date saveDate;
 
@@ -51,6 +59,8 @@ public class Game implements Serializable {
 	// in ascending order by primary key of the associated entities
 	@OrderColumn(name = "board_order")
 	private List<Integer> board;
+	
+	private boolean turn = true;
 
 	public Game()
 	{
@@ -65,10 +75,25 @@ public class Game implements Serializable {
 		}
 
 	}
+	
+	//this is for clone a new Game
+/*	 public Game(Game another) {
+		    this.board = another.board;
+		    this.endDate = another.endDate;
+		    this.id = another.id;
+		    this.outcome = another.outcome;
+		    this.player1 = another.getPlayer1();
+		    this.player2 = another.getPlayer2();
+		    this.saveDate = another.getSaveDate();
+		    this.startDate = another.getStartDate();
+		    this.turn = another.isTurn();
+	 }
+*/   
 
 	/******************** get next step **************************/
 	// Min + (int)(Math.random() * ((Max - Min) + 1))
 	// (Min,Max)
+	@JsonIgnore
 	public int getRandomStep()
 	{
 		int randomS = -1;
@@ -83,6 +108,7 @@ public class Game implements Serializable {
 		return randomS;
 	}
 
+	@JsonIgnore
 	// set p1WS position, if player 1 is going to win
 	public int getP1WinStep()
 	{
@@ -176,6 +202,7 @@ public class Game implements Serializable {
 	}
 
 	// player 2
+	@JsonIgnore
 	public int getP2WinStep()
 	{
 		int p2WS = -1;
@@ -467,5 +494,50 @@ public class Game implements Serializable {
 	{
 		this.outcome = outcome;
 	}
+	
+	//@JsonIgnore
+	public boolean isTurn()
+	{
+		return turn;
+	}
 
+	public void setTurn( boolean turn )
+	{
+		this.turn = turn;
+	}
+
+	/******************modified getters --- username *********************/
+	public String getPlayer1Username()
+	{
+		return player1.getUsername();
+	}
+	
+	public String getPlayer2Username()
+	{
+		return player2.getUsername();
+	}
+		
+	@JsonIgnore
+	public int getPlayer1Id()
+	{
+		return player1.getId();
+	}
+	
+	@JsonIgnore
+	public int getPlayer2Id()
+	{
+		return player2.getId();
+	}
+	
+	/*****************************clone**********************************/
+/*	@JsonIgnore
+	public Object clone(){  
+	    try{  
+	        return super.clone();  
+	    }catch(Exception e){ 
+	        return null; 
+	    }
+	}
+	*/
+	
 }

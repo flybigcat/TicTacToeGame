@@ -10,11 +10,16 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
-    <mvc:annotation-driven />
+    <mvc:annotation-driven>
+        <mvc:async-support default-timeout="600000" />
+    </mvc:annotation-driven>
 
     <context:component-scan base-package="ttt.web" />
     
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"  />
 
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+    
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
@@ -23,5 +28,7 @@
      <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="messages" />
     </bean> 
+    
+  
 
 </beans>

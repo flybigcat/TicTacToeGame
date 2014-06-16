@@ -66,7 +66,9 @@ public class UserController {
 		userDao.setUser( user );
 		sessionStatus.setComplete();
 
-		return "redirect:/user/login.html";
+		//return "redirect:/spring_security_login";
+		
+		return "redirect:../login.jsp";
 	}
 
 	/***************************** login **********************************/
@@ -113,9 +115,22 @@ public class UserController {
 			savehistoryMark = true;
 			session.setAttribute( "savehistoryMark", null );
 		}
-
+		
 		if ( savehistoryMark )
 			return "redirect:/game/savedGameHistory.html";
+		
+		int twoPlayers = 0;
+		if ( session.getAttribute( "twoPlayers" ) != null )
+		{
+			twoPlayers = (int) session.getAttribute( "twoPlayers" );
+			session.setAttribute( "twoPlayers", null );
+		}
+
+		if ( twoPlayers ==1 )
+			return "redirect:/game/TicTacToeGame2.html?playerRole=1";
+		
+		if ( twoPlayers ==2 )
+			return "redirect:/game/TicTacToeGame2.html?playerRole=2";
 
 		return "redirect:/game/TicTacToeGame.html";
 	}
@@ -143,7 +158,8 @@ public class UserController {
 
 		session.invalidate();
 
-		return "user/logout";
+	//	return "user/logout";
+		return "redirect:/j_spring_security_logout";
 
 	}
 

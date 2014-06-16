@@ -8,31 +8,31 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>Registration</title>
 <link href="../css/min.css" rel="stylesheet" />
+<title>Registration</title>
 </head>
 
 <body>
-	<div class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle">
-					<span class="icon-bar"></span> <span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="../">Welcome to Tic Tac Toe Game</a>
-			</div>
-			<div class="collapse navbar-collapse">
-				<ul class="nav navbar-nav">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle">
+                    <span class="icon-bar"></span> <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../">Welcome to Tic Tac Toe Game</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
 
-					<li><a href="../welcome.jsp">Go back to Welcome page</a></li>
-					<li><a href="login.html">Login</a></li>
+                    <li><a href="../welcome.jsp">Go back to Welcome page</a></li>
+                    <li><a href="../login.jsp">Login</a></li>
 
-				</ul>
-			</div>
-			<!--/.nav-collapse -->
-		</div>
-	</div>
-
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+    
 	<form:form modelAttribute="user">
 		<table border='1'>
 
@@ -44,8 +44,8 @@
 
 			<tr>
 				<th>Password:</th>
-				<td><form:password path="password" /> <span
-					style="color: red;"><form:errors path="password" /></span></td>
+				<td><form:password path="password" /> <span style="color: red;"><form:errors
+							path="password" /></span></td>
 			</tr>
 
 			<tr>

@@ -16,6 +16,7 @@ import ttt.model.Game;
 import ttt.model.User;
 import ttt.model.dao.GameDao;
 import ttt.model.dao.UserDao;
+import ttt.security.SecurityUtils;
 
 @Controller
 public class HistoryController {
@@ -35,16 +36,18 @@ public class HistoryController {
 	 * game length (i.e. end time - start time), and the outcome.
 	 */
 	@RequestMapping(value = "/game/history.html")
-	public String history( HttpSession session, HttpServletRequest request )
+	public String history( HttpSession session, ModelMap models )
 	{
 
-		if ( session.getAttribute( "player" ) == null )
-		{
-			session.setAttribute( "historyMark", 1 );
-			return "redirect:/user/login.html";
-		}
+		// if ( session.getAttribute( "player" ) == null )
+		// {
+		// session.setAttribute( "historyMark", 1 );
+		// return "redirect:/user/login.html";
+		// }
+		//
+		// User player = (User) session.getAttribute( "player" );
 
-		User player = (User) session.getAttribute( "player" );
+		User player = userDao.getUser( SecurityUtils.getUsername() );
 
 		List<Game> gameAI = gameDao.getGamesAgainstAI( player );
 		List<Game> gamePlayer1 = gameDao.getGamesAsPlayer1AgainstHuman( player );
@@ -67,7 +70,7 @@ public class HistoryController {
 		int curYear = curCalendar.get( Calendar.YEAR );
 		int curMonth = curCalendar.get( Calendar.MONTH );
 
-		if ( gameAI != null )
+		if ( gameAI != null && gameAI.size() != 0 )
 		{
 			gameAIN = gameAI.size();
 			int win = 0;
@@ -87,7 +90,7 @@ public class HistoryController {
 		}
 
 		int win1 = 0;
-		if ( gamePlayer1 != null )
+		if ( gamePlayer1 != null && gamePlayer1.size() != 0 )
 		{
 			gamePlayer1N = gamePlayer1.size();
 
@@ -106,7 +109,7 @@ public class HistoryController {
 		}
 
 		int win2 = 0;
-		if ( gamePlayer2 != null )
+		if ( gamePlayer2 != null && gamePlayer2.size() != 0 )
 		{
 			gamePlayer2N = gamePlayer2.size();
 
@@ -130,26 +133,25 @@ public class HistoryController {
 					/ (float) ( gamePlayer1N + gamePlayer2N );
 		}
 
-		// System.out.println( gameAIN );
-
+		models.put( "player", player );
 		// 1. The number of games completed (i.e. excluding the saved games).
-		request.setAttribute( "totalN", gameAIN + gamePlayer1N + gamePlayer2N );
+		models.put( "totalN", gameAIN + gamePlayer1N + gamePlayer2N );
 		// 2. The number of 1-player games completed.
-		request.setAttribute( "OnePlayerN", gameAIN );
+		models.put( "OnePlayerN", gameAIN );
 		// 3. The number of 2-player games completed.
-		request.setAttribute( "TwoPlayersN", gamePlayer1N + gamePlayer2N );
+		models.put( "TwoPlayersN", gamePlayer1N + gamePlayer2N );
 		// 4. The win rate against AI.
-		request.setAttribute( "winAI", winAI );
+		models.put( "winAI", winAI );
 		// 5. The win rate against human players.
-		request.setAttribute( "winHuman", winHuman );
+		models.put( "winHuman", winHuman );
 
 		// 6. The list of games played this month. For each game, show the
 		// opponent's name (username for a human player, or "AI" for the AI
 		// player),
 		// game length (i.e. end time - start time), and the outcome.
-		request.setAttribute( "gameAIMonth", gameAIMonth );
-		request.setAttribute( "gamePlayer1Month", gamePlayer1Month );
-		request.setAttribute( "gamePlayer2Month", gamePlayer2Month );
+		models.put( "gameAIMonth", gameAIMonth );
+		models.put( "gamePlayer1Month", gamePlayer1Month );
+		models.put( "gamePlayer2Month", gamePlayer2Month );
 
 		return "/game/history";
 	}
@@ -158,14 +160,17 @@ public class HistoryController {
 	public String savedGameHistory( ModelMap models, HttpSession session )
 	{
 
-		if ( session.getAttribute( "player" ) == null )
-		{
-			session.setAttribute( "savehistoryMark", 1 );
-			return "redirect:/user/login.html";
-		}
+		// if ( session.getAttribute( "player" ) == null )
+		// {
+		// session.setAttribute( "savehistoryMark", 1 );
+		// return "redirect:/user/login.html";
+		// }
+		//
+		// User player = (User) session.getAttribute( "player" );
 
-		User player = (User) session.getAttribute( "player" );
+		User player = userDao.getUser( SecurityUtils.getUsername() );
 
+		models.put( "player", player );
 		models.put( "savedGames", gameDao.getSavedGames( player ) );
 		return "/game/savedGameHistory";
 	}

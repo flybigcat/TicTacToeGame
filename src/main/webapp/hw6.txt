@@ -1,0 +1,65 @@
+Using SecurityUtils to Access Authentication Information
+
+1. login
+    login.jsp in the "webapp" folder is used as a customized login page
+     <security:form-login login-page="/login.jsp"/>
+    
+2. logout
+    first go to controller "/user/logout.html"
+    do some process and return "redirect:/j_spring_security_logout"; lead to default logout
+    
+3. Everyone can play a game with AI, but only authenticated users have access to functions like save/resume game, view game history, and participate in 2-player games.
+ game with AI "/game/TicTacToeGame.html" does not need url security check
+ But inside this method, there are two part
+ The first part is inside if ( SecurityUtils.isAuthenticated() ) {} for authenticated user, and it can save records, resume game
+ The second part is inside if ( SecurityUtils.isAnonymous() ) {} for others
+ 
+ url security covers:
+ "/game/history.html"
+ "/game/savedGameHistory.html"
+ "/game/TicTacToeGame2.html" (2-player game)
+ "/game/saveGame.html" (save the game)
+ All the above url need "authenticated" to be accessed
+
+4. Players can only resume their own saved games.
+First of all, the "resume" part is in if ( SecurityUtils.isAuthenticated() ) {} and "save" is implemented by  "/game/saveGame.html" url
+So only authenticated users can resume and save game, and get their own save games and resume them
+
+Then, in the GameDaoImpl class, method invoke security and object security (This is not necessary, because we already have url security.)
+@PostAuthorize("principal.username == returnObject.player1.username") is used for method
+public Game getGame( Integer id ) 
+to make sure Players can only resume their own saved games. 
+
+@PreAuthorize("principal.username == #user.username")
+public User saveUser( User user ) 
+guarantee the player can only save his/her own game
+
+5. The user interface should hide operations from the users who do not have the privilege to perform those operations.
+1). TicTacToeGame.jsp 1-player game 
+hides "save" link from no authenticated user by implemented      
+<security:authorize access="authenticated">
+     <a href="saveGame.html">Save this Game for later Resume</a>
+</security:authorize>
+before the game is finished
+
+2). TicTacToeGame.jsp 1-player game 
+hides "logout" link from no authenticated user by implemented      
+<security:authorize access="authenticated">
+   <a href="../user/logout.html">Logout</a>
+</security:authorize> 
+
+3). welcome page
+hides "logout" link from no authenticated user by implemented
+<security:authorize access="authenticated">
+    <a href="user/logout.html">Logout</a>
+</security:authorize> 
+
+hides "login", "registration" links from authenticated users, exposes to no authenticated users by implemented
+    <security:authorize access="not authenticated">
+        <p>
+            <a href="login.jsp">Login</a>
+        </p>
+        <p>
+            <a href="user/registration.html">Registration</a>
+        </p>
+    </security:authorize>

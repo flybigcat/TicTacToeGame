@@ -19,7 +19,8 @@
         startDate timestamp,
         endDate timestamp,
         saveDate timestamp,
-        outcome varchar(255),       
+        outcome varchar(255), 
+        turn boolean not null default 't',
         primary key (id)
     );
 
@@ -32,6 +33,11 @@
         primary key (id)
     );
 
+     create table authorities (
+        username varchar(255) not null,
+        authority varchar(255)
+    );
+    
     alter table users 
         add constraint UK_r43af9ap4edm43mmtq01oddj6 unique (username);
 
@@ -56,16 +62,20 @@
     insert into users values (1,'cysun', 'abcd','cysun@localhost.localdomain', true);
     insert into users values (2,'AI', 'AI', 'AI',true);   
     select * from users;
+    
+    insert into authorities values('AI', 'ROLE_ADMIN');
+    insert into authorities values('cysun', 'ROLE_USER');
+
      
 -- Add two games played by cysun against the AI player; 
 -- one of them is a win and the other one a loss.
-   insert into games values (1, 1, 2, current_timestamp, current_timestamp, null, 'win');
-   insert into games values (2, 1, 2, current_timestamp, current_timestamp, null, 'loss');
+   insert into games values (1, 1, 2, current_timestamp, current_timestamp, null, 'win', false);
+   insert into games values (2, 1, 2, current_timestamp, current_timestamp, null, 'loss', false);
    select * from games;
    
 -- Add a saved game by cysun. 
 -- In the game cysun occupied the upper-left cell and the AI player occupied the center cell.
-   insert into games values (3, 1, 2, current_timestamp, null, current_timestamp, null);
+   insert into games values (3, 1, 2, current_timestamp, null, current_timestamp, null, true);
    
    insert into game_boards values (3, 1, 0);
    insert into game_boards values (3, 0, 1);

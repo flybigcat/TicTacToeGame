@@ -1,15 +1,21 @@
 package ttt.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
@@ -37,10 +43,20 @@ public class User implements Serializable{
     @OneToMany(mappedBy="player2", cascade=CascadeType.ALL)
  	private Set<Game> gamesAsPlayer2;
     
+	@JsonIgnore
+    @ElementCollection
+    @CollectionTable(name = "authorities",
+        joinColumns = @JoinColumn(name = "username", referencedColumnName="username"))
+    @Column(name = "authority")
+    private Set<String> roles;
+    
+	@JsonIgnore
     private boolean enabled = true;
     
     public User()
     {
+    	roles = new HashSet<String>();
+    	roles.add( "ROLE_USER" );
     }
 
     public Integer getId()
@@ -106,9 +122,18 @@ public class User implements Serializable{
 	public void setGamesAsPlayer2( Set<Game> gamesAsPlayer2 )
 	{
 		this.gamesAsPlayer2 = gamesAsPlayer2;
+	}	
+	
+	public Set<String> getRoles()
+	{
+		return roles;
 	}
 
-	
+	public void setRoles( Set<String> roles )
+	{
+		this.roles = roles;
+	}
+
 	public boolean isEnabled()
 	{
 		return enabled;

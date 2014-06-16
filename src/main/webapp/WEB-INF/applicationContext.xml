@@ -37,7 +37,9 @@
     <tx:annotation-driven />
 
     <context:component-scan base-package="ttt.model" />
-    
+    <context:component-scan base-package="ttt.service" />
+    <context:component-scan base-package="ttt.security" />
+      
      <security:authentication-manager>
         <security:authentication-provider>
             <security:jdbc-user-service data-source-ref="dataSource" />
@@ -45,7 +47,13 @@
     </security:authentication-manager>
 
     <security:http auto-config="true" use-expressions="true">
-        <security:intercept-url pattern="/users.html" access="hasRole('ROLE_ADMIN')" />
+        <security:form-login login-page="/login.jsp"/>
+        <security:intercept-url pattern="/game/history.html" access="authenticated" />
+        <security:intercept-url pattern="/game/savedGameHistory.html" access="authenticated" />
+        <security:intercept-url pattern="/game/TicTacToeGame2.html" access="authenticated" />
+         <security:intercept-url pattern="/game/saveGame.html" access="authenticated" />
     </security:http>
+    
+    <security:global-method-security pre-post-annotations="enabled" />
     
     </beans>

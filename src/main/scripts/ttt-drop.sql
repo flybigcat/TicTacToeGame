@@ -11,6 +11,8 @@
         drop constraint if exists UK_r43af9ap4edm43mmtq01oddj6;
 
     drop table if exists users cascade;
+    
+     drop table if exists authorities;
  
     drop table if exists game_boards;
 
